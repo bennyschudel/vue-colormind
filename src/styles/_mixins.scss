@@ -1,0 +1,25 @@
+@mixin ui-fit() {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+@mixin ui-alpha-background() {
+  background-image: repeating-linear-gradient(45deg, #D0D0D0, #D0D0D0 10px, #F0F0F0 10px, #F0F0F0 20px);
+}
+
+@mixin ui-button-clear() {
+  border: none;
+  appearance: none;
+  background-color: transparent;
+  padding: 0;
+  margin: 0;
+  border-radius: 0;
+  font-size: unset;
+
+  &:disabled {
+    color: currentColor;
+  }
+}
