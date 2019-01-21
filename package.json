@@ -1,5 +1,5 @@
 {
-  "name": "vue-colormind",
+  "name": "@hotpink/vue-colormind",
   "version": "0.1.0",
   "private": false,
   "main": "./dist/vue-colormind.umd.js",
