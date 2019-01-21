@@ -1,6 +1,6 @@
 {
   "name": "@hotpink/vue-colormind",
-  "version": "0.1.0",
+  "version": "0.0.0-development",
   "private": false,
   "main": "./dist/vue-colormind.umd.js",
   "scripts": {
@@ -8,7 +8,9 @@
     "build-lib": "vue-cli-service build --target lib --name vue-colormind ./src/lib.js",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "test:unit": "vue-cli-service test:unit"
+    "test": "vue-cli-service lint",
+    "test:unit": "vue-cli-service test:unit",
+    "semantic-release": "semantic-release"
   },
   "files": [
     "dist/*"
@@ -30,7 +32,8 @@
     "eslint-plugin-vue": "^5.0.0",
     "node-sass": "^4.9.0",
     "sass-loader": "^7.0.1",
-    "vue-template-compiler": "^2.5.21"
+    "vue-template-compiler": "^2.5.21",
+    "semantic-release": "^15.13.3"
   },
   "peerDependencies": {
     "vue": "~2.x"
@@ -86,5 +89,9 @@
       "**/tests/unit/**/*.spec.(js|jsx|ts|tsx)|**/__tests__/*.(js|jsx|ts|tsx)"
     ],
     "testURL": "http://localhost/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bennyschudel/vue-colormind.git"
   }
 }
