@@ -7,8 +7,6 @@ Vue component for a simple usage of the [colormind.io](http://colormind.io) serv
 ```javascript
 import VueColormind from '@hotpink/vue-colormind';
 
-import '@hotpink/vue-colormind/dist/vue-colormind.css';
-
 new Vue({
   name: 'app',
   data: () => ({
