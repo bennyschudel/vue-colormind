@@ -1,13 +1,27 @@
 <template>
-  <div class="vue-colormind">
+  <div class="vue-colormind"
+    @click="emitUpdateActiveIndex()"
+  >
+    <div class="vue-colormind__model">
+      <select
+        v-model="model"
+      >
+        <option
+          v-for="(item, index) in models"
+          :key="index"
+        >{{item}}</option>
+      </select>
+    </div>
     <div class="vue-colormind__swatches">
       <ColorSwatch
         v-for="(item, index) in colors"
-        :key="item.key"
+        :key="index"
         :value.sync="item.value"
         :locked.sync="item.locked"
+        :active="index === activeIndex"
         @action:move-up="moveUp(index)"
         @action:move-down="moveDown(index)"
+        @select="onSwatchSelect(index)"
       />
     </div>
     <div class="vue-colormind__actions">
@@ -22,51 +36,50 @@
 </template>
 
 <script>
-import { loadPalette } from '@/services/colormind';
+import { Color, UiButton, UiIcon } from '@hotpink/vue-mono-ui';
 
-import Color from './core/Color';
+import { clone } from './core/utils';
 
-import UiButton from './ui/UiButton';
-import UiIcon from './ui/UiIcon';
+import { loadPalette, loadAvailableModels } from './services/colormind';
 
-import ColorSwatch from './components/ColorSwatch';
+import ColorSwatch from './components/ColorSwatch.vue';
 
 export default {
   name: 'vue-colormind',
   props: {
     value: {
       type: Array,
-      default: () => ['red', 'green', 'gold', 'chocolate', 'hotpint'],
+      default: () => ['#597B7C', '#C2BDA7', '#F4E3BB', '#F4BFB0', '#D78080'],
+    },
+    activeIndex: {
+      type: Number,
     },
   },
   data: () => ({
     colors: [
       {
-        key: 1,
         value: [0, 0, 0],
         locked: false,
       },
       {
-        key: 2,
         value: [0, 0, 0],
         locked: false,
       },
       {
-        key: 3,
         value: [0, 0, 0],
         locked: false,
       },
       {
-        key: 4,
         value: [0, 0, 0],
         locked: false,
       },
       {
-        key: 5,
         value: [0, 0, 0],
         locked: false,
       },
     ],
+    model: 'default',
+    models: [],
   }),
   computed: {
     count() {
@@ -77,12 +90,20 @@ export default {
     },
   },
   methods: {
+    async loadAvailableModels() {
+      const models = await loadAvailableModels();
+
+      this.models = models;
+    },
     async generatePalette() {
-      let { colors } = this;
+      let { model, colors } = this;
 
       colors = colors.map(d => (d.locked ? d.value : null));
 
-      const palette = await loadPalette({ colors });
+      const palette = await loadPalette({
+        colors,
+        model,
+      });
 
       palette.forEach((v, i) => {
         this.colors[i].value = v;
@@ -103,6 +124,16 @@ export default {
       colors.splice(index, 1);
       colors.splice(pos, 0, item);
     },
+    emitUpdateActiveIndex(index) {
+      this.$emit('update:activeIndex', index);
+    },
+    emitColorSelect(color) {
+      this.$emit('color-select', clone(color));
+    },
+    onSwatchSelect(v) {
+      this.emitUpdateActiveIndex(v);
+      this.emitColorSelect(this.colors[v]);
+    },
     handleValueChange(v) {
       let data = v.map(d => new Color(d));
       data = data.map(color => {
@@ -121,7 +152,7 @@ export default {
     },
     handleFlatColorsChange(v) {
       let data = v.map(([r, g, b]) => new Color({ r, g, b }));
-      data = data.map(color => color.toHex());
+      data = data.map(color => color.toHexString());
 
       this.$emit('update:value', data);
     },
@@ -131,11 +162,13 @@ export default {
     flatColors: 'handleFlatColorsChange',
   },
   components: {
+    ColorSwatch,
     UiButton,
     UiIcon,
-    ColorSwatch,
   },
   created() {
+    this.loadAvailableModels();
+
     this.handleValueChange(this.value);
   },
 };

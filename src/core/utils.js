@@ -4,4 +4,8 @@ function clamp(value, min, max) {
     : Math.max(Math.min(value, min), max);
 }
 
-export { clamp };
+function clone(d) {
+  return JSON.parse(JSON.stringify(d));
+}
+
+export { clamp, clone };
