@@ -1,24 +1,31 @@
 {
   "name": "@hotpink/vue-colormind",
   "version": "0.0.0-development",
+  "license": "MIT",
   "private": false,
-  "main": "./dist/vue-colormind.umd.js",
+  "main": "dist/vue-colormind.umd.js",
+  "module": "dist/vue-colormind.esm.js",
+  "unpkg": "dist/vue-colormind.min.js",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build-lib": "vue-cli-service build --target lib --name vue-colormind ./src/lib.js",
-    "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "test": "vue-cli-service lint",
-    "test:unit": "vue-cli-service test:unit",
+    "build:demo": "vue-cli-service build --dest demo",
+    "build": "npm run build:unpkg && npm run build:es && npm run build:umd && yalc push",
+    "build:umd": "cross-env NODE_ENV=production rollup --config build/rollup.config.js --format umd --file dist/vue-colormind.umd.js",
+    "build:es": "cross-env NODE_ENV=production rollup --config build/rollup.config.js --format es --file dist/vue-colormind.esm.js",
+    "build:unpkg": "cross-env NODE_ENV=production rollup --config build/rollup.config.js --format iife --file dist/vue-colormind.min.js",
     "semantic-release": "semantic-release"
   },
   "files": [
-    "dist/*"
+    "dist/*",
+    "src/*",
+    "!src/VueColormind.vue"
   ],
-  "dependencies": {
-    "tinycolor2": "^1.4.1"
-  },
+  "dependencies": {},
   "devDependencies": {
+    "@hotpink/vue-mono-ui": "file:.yalc/@hotpink/vue-mono-ui",
     "@vue/cli-plugin-babel": "^3.3.0",
     "@vue/cli-plugin-eslint": "^3.3.0",
     "@vue/cli-plugin-unit-jest": "^3.3.0",
@@ -27,16 +34,31 @@
     "@vue/test-utils": "^1.0.0-beta.20",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
-    "babel-jest": "^23.6.0",
+    "cross-env": "^5.2.0",
+    "d3": "^5.7.0",
     "eslint": "^5.8.0",
-    "eslint-plugin-vue": "^5.0.0",
-    "node-sass": "^4.9.0",
-    "sass-loader": "^7.0.1",
-    "vue-template-compiler": "^2.5.21",
-    "semantic-release": "^15.13.3"
+    "eslint-loader": "^2.1.1",
+    "eslint-plugin-vue": "^5.1.0",
+    "minimist": "^1.2.0",
+    "node-sass": "^4.11.0",
+    "rollup": "^0.67.4",
+    "rollup-plugin-buble": "^0.19.6",
+    "rollup-plugin-delete": "^0.1.2",
+    "rollup-plugin-node-resolve": "^4.0.0",
+    "rollup-plugin-nodent": "^0.2.2",
+    "rollup-plugin-replace": "^2.1.0",
+    "rollup-plugin-sass": "^1.1.0",
+    "rollup-plugin-scss": "^0.4.0",
+    "rollup-plugin-uglify-es": "0.0.1",
+    "rollup-plugin-vue": "4.3.2",
+    "sass-loader": "^7.1.0",
+    "tinycolor2": "^1.4.1",
+    "vue": "^2.5.21",
+    "vue-template-compiler": "^2.5.21"
   },
   "peerDependencies": {
-    "vue": "~2.x"
+    "vue": "~2.x",
+    "d3": "~5.x"
   },
   "eslintConfig": {
     "root": true,
@@ -67,34 +89,11 @@
     "tabWidth": 2,
     "trailingComma": "all"
   },
-  "jest": {
-    "moduleFileExtensions": [
-      "js",
-      "jsx",
-      "json",
-      "vue"
-    ],
-    "transform": {
-      "^.+\\.vue$": "vue-jest",
-      ".+\\.(css|styl|less|sass|scss|svg|png|jpg|ttf|woff|woff2)$": "jest-transform-stub",
-      "^.+\\.jsx?$": "babel-jest"
-    },
-    "moduleNameMapper": {
-      "^@/(.*)$": "<rootDir>/src/$1"
-    },
-    "snapshotSerializers": [
-      "jest-serializer-vue"
-    ],
-    "testMatch": [
-      "**/tests/unit/**/*.spec.(js|jsx|ts|tsx)|**/__tests__/*.(js|jsx|ts|tsx)"
-    ],
-    "testURL": "http://localhost/"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/bennyschudel/vue-colormind.git"
   },
- "publishConfig": {
+  "publishConfig": {
     "access": "public"
   }
 }
