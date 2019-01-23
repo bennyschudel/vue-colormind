@@ -1,12 +1,13 @@
 <template>
-  <div class="color-swatch" :data-locked="locked">
+  <div class="color-swatch" :data-locked="locked" :data-active="active">
     <div
       class="color-swatch__body"
       :style="bodyStyles"
+      @click.stop="$emit('select')"
     />
     <div class="color-swatch__info">
       <UiColorInput
-        :value="color.toHex()"
+        :value="color.toHexString()"
         @update:value="onColorInputChange"
       />
       <div class="color-swatch__actions">
@@ -36,10 +37,7 @@
 </template>
 
 <script>
-import Color from '@/core/Color';
-
-import UiIconButton from '@/ui/UiIconButton';
-import UiColorInput from '@/ui/UiColorInput';
+import { Color, UiIconButton, UiColorInput } from '@hotpink/vue-mono-ui';
 
 export default {
   name: 'color-swatch',
@@ -57,6 +55,9 @@ export default {
       default: () => [0, 0, 0],
     },
     locked: {
+      type: Boolean,
+    },
+    active: {
       type: Boolean,
     },
   },
@@ -82,7 +83,7 @@ export default {
       this.$emit('update:locked', !this.locked);
     },
     onColorInputChange(v) {
-      const { r, g, b } = new Color(v).toRgb();
+      const { r, g, b } = v.toRgb();
 
       this.$emit('update:value', [r, g, b]);
     },
@@ -122,6 +123,14 @@ export default {
   .ui-icon-button {
     &[data-name='locked'] {
       margin-left: auto;
+    }
+  }
+}
+
+.color-swatch {
+  &[data-active] {
+    .color-swatch__body {
+      box-shadow: inset 0 0 0 4px hsla(0, 0%, 0%, 0.5);
     }
   }
 }
