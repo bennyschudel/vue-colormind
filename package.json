@@ -25,7 +25,7 @@
   ],
   "dependencies": {},
   "devDependencies": {
-    "@hotpink/vue-mono-ui": "file:.yalc/@hotpink/vue-mono-ui",
+    "@hotpink/vue-mono-ui": "^0.1.0",
     "@vue/cli-plugin-babel": "^3.3.0",
     "@vue/cli-plugin-eslint": "^3.3.0",
     "@vue/cli-plugin-unit-jest": "^3.3.0",
