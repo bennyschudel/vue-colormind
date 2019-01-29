@@ -3,16 +3,22 @@
   "version": "0.0.0-development",
   "license": "MIT",
   "private": false,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bennyschudel/vue-colormind.git"
+  },
+  "homepage": "https://github.com/bennyschudel/vue-colormind#readme",
+  "bugs": "https://github.com/bennyschudel/vue-colormind/issues",
   "main": "dist/vue-colormind.umd.js",
   "module": "dist/vue-colormind.esm.js",
   "unpkg": "dist/vue-colormind.min.js",
   "scripts": {
+    "prepublish": "npm run build",
     "serve": "vue-cli-service serve",
-    "build-lib": "vue-cli-service build --target lib --name vue-colormind ./src/lib.js",
     "lint": "vue-cli-service lint",
     "test": "vue-cli-service lint",
     "build:demo": "vue-cli-service build --dest demo",
-    "build": "npm run build:unpkg && npm run build:es && npm run build:umd && yalc push",
+    "build": "npm run build:unpkg && npm run build:es && npm run build:umd",
     "build:umd": "cross-env NODE_ENV=production rollup --config build/rollup.config.js --format umd --file dist/vue-colormind.umd.js",
     "build:es": "cross-env NODE_ENV=production rollup --config build/rollup.config.js --format es --file dist/vue-colormind.esm.js",
     "build:unpkg": "cross-env NODE_ENV=production rollup --config build/rollup.config.js --format iife --file dist/vue-colormind.min.js",
@@ -21,9 +27,17 @@
   "files": [
     "dist/*",
     "src/*",
-    "!src/VueColormind.vue"
+    "!build/*",
+    "!src/demo/*",
+    "!vue.config.js"
   ],
-  "dependencies": {},
+  "dependencies": {
+    "@hotpink/vue-mono-ui": "^1.0.2",
+    "d3": "~5.x",
+    "lodash": "~4.x",
+    "tinycolor2": "^1.4.1",
+    "vue": "~2.x"
+  },
   "devDependencies": {
     "@hotpink/vue-mono-ui": "^0.1.0",
     "@vue/cli-plugin-babel": "^3.3.0",
@@ -35,7 +49,6 @@
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
     "cross-env": "^5.2.0",
-    "d3": "^5.7.0",
     "eslint": "^5.8.0",
     "eslint-loader": "^2.1.1",
     "eslint-plugin-vue": "^5.1.0",
@@ -53,13 +66,7 @@
     "rollup-plugin-vue": "4.3.2",
     "sass-loader": "^7.1.0",
     "semantic-release": "^15.13.3",
-    "tinycolor2": "^1.4.1",
-    "vue": "^2.5.21",
     "vue-template-compiler": "^2.5.21"
-  },
-  "peerDependencies": {
-    "vue": "~2.x",
-    "d3": "~5.x"
   },
   "eslintConfig": {
     "root": true,
@@ -82,17 +89,14 @@
   },
   "browserslist": [
     "> 1%",
-    "last 2 versions",
-    "not ie <= 8"
+    "last 2 version",
+    "not IE 11",
+    "not dead"
   ],
   "prettier": {
     "singleQuote": true,
     "tabWidth": 2,
     "trailingComma": "all"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/bennyschudel/vue-colormind.git"
   },
   "publishConfig": {
     "access": "public"

@@ -1,18 +1,23 @@
-# <VueColormind />
+# &lt;VueColormind&gt;
 
-Vue component for a simple usage of the [colormind.io](http://colormind.io) service.
+A vue component which creates beautiful color palettes using the [colormind.io](http://colormind.io) service.
 
 ## Usage
 
 ```javascript
+import Vue from 'vue';
+
+import MonoUi from '@hotpin/vue-mono-ui';
 import VueColormind from '@hotpink/vue-colormind';
+
+Vue.use(MonoUi);
 
 new Vue({
   name: 'app',
   data: () => ({
     colors: ['hotpink', 'black', 'black', 'black', 'black']
   }),
-  template: `<div class="app"> <VueColormind :value.sync="colors" /> </div>`
+  template: `<VueColormind :value.sync="colors" />`
   components: {
     VueColormind,
   }
