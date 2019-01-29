@@ -1,20 +1,30 @@
 <template>
   <div id="demo">
-    <VueColormind
-      :value.sync="colors"
-      :active-index.sync="activeIndex"
-      @color-select="onColorSelect"
-    />
-    <pre>
+    <UiWidgetManager>
+      <UiWidget
+        title="colormind.io"
+      >
+        <VueColormind
+          :value.sync="colors"
+          :active-index.sync="activeIndex"
+          @color-select="onColorSelect"
+        />
+      </UiWidget>
+      <UiWidget
+        title="debug"
+      >
+        <pre>
 {{activeIndex}}
 {{color}}
 {{colors}}
-    </pre>
+        </pre>
+      </UiWidget>
+    </UiWidgetManager>
   </div>
 </template>
 
 <script>
-import VueColormind from './entry';
+import VueColormind from '@/entry';
 
 export default {
   name: 'demo',
@@ -35,4 +45,11 @@ export default {
 </script>
 
 <style lang="scss">
+#demo {
+  .ui-widget__content {
+    padding: 16px;
+    border: 1px solid black;
+    background-color: white;
+  }
+}
 </style>
