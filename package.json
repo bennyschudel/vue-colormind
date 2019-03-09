@@ -32,16 +32,17 @@
     "!vue.config.js"
   ],
   "dependencies": {
-    "@hotpink/vue-mono-ui": "^1.0.2",
+    "@hotpink/vue-mono-ui": "^1.2.0",
     "d3": "~5.x",
     "lodash": "~4.x",
     "tinycolor2": "^1.4.1",
-    "vue": "~2.x"
+    "vue": "~2.x",
+    "vue-drag-drop": "^1.1.4"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.3.0",
     "@vue/cli-plugin-eslint": "^3.3.0",
-    "@vue/cli-plugin-unit-jest": "^3.3.0",
+    "@vue/cli-plugin-unit-jest": "^3.5.0",
     "@vue/cli-service": "^3.3.0",
     "@vue/eslint-config-prettier": "^4.0.1",
     "@vue/test-utils": "^1.0.0-beta.20",

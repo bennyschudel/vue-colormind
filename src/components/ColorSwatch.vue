@@ -1,37 +1,35 @@
 <template>
   <div class="color-swatch" :data-locked="locked" :data-active="active">
-    <div
+    <UiColorSwatch
       class="color-swatch__body"
-      :style="bodyStyles"
-      @click.stop="$emit('select')"
+      :color="color"
+      @update:color="onColorUpdate"
+      @click.stop="onSwatchClick"
     />
     <div class="color-swatch__info">
-      <UiColorInput
-        :value="color.toHexString()"
-        @update:value="onColorInputChange"
+      <UiColorInput :color="color" no-swatch @update:color="onColorUpdate" />
+    </div>
+    <div class="color-swatch__actions">
+      <UiIconButton
+        data-name="move-up"
+        icon="arrow-up"
+        :icon-size="24"
+        :padding="0"
+        @click="emitAction('move-up')"
       />
-      <div class="color-swatch__actions">
-        <UiIconButton
-          data-name="move-up"
-          icon="arrow-up"
-          :icon-size="24"
-          :padding="0"
-          @click="emitAction('move-up')"
-        />
-        <UiIconButton
-          data-name="move-down"
-          icon="arrow-down"
-          :icon-size="24"
-          :padding="0"
-          @click="emitAction('move-down')"
-        />
-        <UiIconButton
-          data-name="locked"
-          :icon="locked ? 'lock-closed' : 'lock-open'"
-          :icon-size="24"
-          @click="toggleLocked"
-        />
-      </div>
+      <UiIconButton
+        data-name="move-down"
+        icon="arrow-down"
+        :icon-size="24"
+        :padding="0"
+        @click="emitAction('move-down')"
+      />
+      <UiIconButton
+        data-name="locked"
+        :icon="locked ? 'lock-closed' : 'lock-open'"
+        :icon-size="24"
+        @click="toggleLocked"
+      />
     </div>
   </div>
 </template>
@@ -42,14 +40,6 @@ import { Color, UiIconButton, UiColorInput } from '@hotpink/vue-mono-ui';
 export default {
   name: 'color-swatch',
   props: {
-    width: {
-      type: Number,
-      default: 100,
-    },
-    height: {
-      type: Number,
-      default: 75,
-    },
     value: {
       type: Array,
       default: () => [0, 0, 0],
@@ -62,16 +52,6 @@ export default {
     },
   },
   computed: {
-    bodyStyles() {
-      const { width, height } = this;
-      const [r, g, b] = this.value;
-
-      return {
-        width: `${width}px`,
-        height: `${height}px`,
-        backgroundColor: `rgb(${r},${g},${b})`,
-      };
-    },
     color() {
       const [r, g, b] = this.value;
 
@@ -82,10 +62,13 @@ export default {
     toggleLocked() {
       this.$emit('update:locked', !this.locked);
     },
-    onColorInputChange(v) {
-      const { r, g, b } = v.toRgb();
+    onColorUpdate(color) {
+      const { r, g, b } = color.toRgb();
 
       this.$emit('update:value', [r, g, b]);
+    },
+    onSwatchClick() {
+      this.$emit('select');
     },
     emitAction(action) {
       this.$emit(`action:${action}`);
@@ -100,19 +83,32 @@ export default {
 
 <style lang="scss">
 .color-swatch {
-  position: relative;
-  display: flex;
+  display: grid;
+  grid-template-columns: 0.5fr 1fr;
+  grid-template-rows: auto auto;
+  grid-template-areas: 'Swatch Input' 'Swatch Controls';
+  grid-gap: 8px;
 }
 
 .color-swatch__body {
-  margin: 8px;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+  grid-template-areas: '.';
+  grid-area: Swatch;
+
+  &.ui-color-swatch {
+    width: 100%;
+    height: 100%;
+  }
 }
 
-.color-swatch__info {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  margin: 8px;
+.color-swatch__input {
+  grid-area: Input;
+}
+
+.color-swatch__action {
+  grid-area: Controls;
 }
 
 .color-swatch__actions {

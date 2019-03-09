@@ -11,13 +11,15 @@ const argv = minimist(process.argv.slice(2));
 
 const config = {
   input: 'src/entry.js',
-  external: ['lodash', 'd3'],
+  external: ['vue', 'lodash', 'd3', 'vue-drag-drop'],
   output: {
     name: 'VueColormind',
     exports: 'named',
     globals: {
+      vue: 'Vue',
       lodash: '_',
       d3: 'd3',
+      'vue-drag-drop': 'VueDragDrop',
       '@hotpink/vue-mono-ui': 'VueMonoUi',
     },
   },

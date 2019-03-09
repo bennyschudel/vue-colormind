@@ -1,42 +1,33 @@
 <template>
-  <div class="vue-colormind"
-    @click="emitUpdateActiveIndex()"
-  >
-    <div class="vue-colormind__model">
-      <select
-        v-model="model"
-      >
-        <option
-          v-for="(item, index) in models"
+  <div class="vue-colormind" @click="emitUpdateActiveIndex()">
+    <fieldset :disabled="busy">
+      <div class="vue-colormind__swatches">
+        <ColorSwatch
+          v-for="(item, index) in colors"
           :key="index"
-        >{{item}}</option>
-      </select>
-    </div>
-    <div class="vue-colormind__swatches">
-      <ColorSwatch
-        v-for="(item, index) in colors"
-        :key="index"
-        :value.sync="item.value"
-        :locked.sync="item.locked"
-        :active="index === activeIndex"
-        @action:move-up="moveUp(index)"
-        @action:move-down="moveDown(index)"
-        @select="onSwatchSelect(index)"
-      />
-    </div>
-    <div class="vue-colormind__actions">
-      <UiButton
-        @click="generatePalette"
-      ><UiIcon
-        icon="sync"
-        slot="icon"
-      />Generate</UiButton>
-    </div>
+          :value.sync="item.value"
+          :locked.sync="item.locked"
+          :active="index === activeIndex"
+          @action:move-up="moveUp(index)"
+          @action:move-down="moveDown(index)"
+          @select="onSwatchSelect(index)"
+        />
+      </div>
+      <UiField class="vue-colormind__actions" label="Model">
+        <UiSelect :value.sync="model" :options="models" />
+        <UiButton icon="sync" @click="generatePalette">
+          Generate
+        </UiButton>
+      </UiField>
+    </fieldset>
+    <transition name="vue-colormind__fade">
+      <UiSpinner v-if="busy" absolute />
+    </transition>
   </div>
 </template>
 
 <script>
-import { Color, UiButton, UiIcon } from '@hotpink/vue-mono-ui';
+import { Color, UiButton, UiSpinner } from '@hotpink/vue-mono-ui';
 
 import { clone } from './core/utils';
 
@@ -56,6 +47,7 @@ export default {
     },
   },
   data: () => ({
+    busy: true,
     colors: [
       {
         value: [0, 0, 0],
@@ -91,13 +83,16 @@ export default {
   },
   methods: {
     async loadAvailableModels() {
+      this.busy = true;
       const models = await loadAvailableModels();
 
       this.models = models;
+      this.busy = false;
     },
     async generatePalette() {
       let { model, colors } = this;
 
+      this.busy = true;
       colors = colors.map(d => (d.locked ? d.value : null));
 
       const palette = await loadPalette({
@@ -108,6 +103,7 @@ export default {
       palette.forEach((v, i) => {
         this.colors[i].value = v;
       });
+      this.busy = false;
     },
     moveUp(index) {
       this.changeIndex(index, index - 1);
@@ -135,7 +131,7 @@ export default {
       this.emitColorSelect(this.colors[v]);
     },
     handleValueChange(v) {
-      let data = v.map(d => new Color(d));
+      let data = v.map(Color);
       data = data.map(color => {
         const { r, g, b } = color.toRgb();
 
@@ -151,10 +147,10 @@ export default {
       });
     },
     handleFlatColorsChange(v) {
-      let data = v.map(([r, g, b]) => new Color({ r, g, b }));
-      data = data.map(color => color.toHexString());
+      let value = v.map(([r, g, b]) => new Color({ r, g, b }));
+      value = value.map(color => color.toHexString());
 
-      this.$emit('update:value', data);
+      this.$emit('update:value', value);
     },
   },
   watch: {
@@ -164,7 +160,7 @@ export default {
   components: {
     ColorSwatch,
     UiButton,
-    UiIcon,
+    UiSpinner,
   },
   created() {
     this.loadAvailableModels();
@@ -175,20 +171,44 @@ export default {
 </script>
 
 <style lang="scss">
+.vue-colormind__fade-enter-active,
+.vue-colormind__fade-leave-active {
+  transition: opacity 0.2s ease-out;
+}
+.vue-colormind__fade-enter,
+.vue-colormind__fade-leave-to {
+  opacity: 0;
+}
+
 .vue-colormind {
+  position: relative;
   display: inline-flex;
   flex-direction: column;
+
+  > fieldset {
+    border: none;
+    margin: 0;
+    padding: 0;
+  }
 }
 
 .vue-colormind__swatches {
-  display: inline-flex;
+  display: inline-grid;
   flex-direction: column;
+  grid-gap: 16px;
 }
 
 .vue-colormind__actions {
   display: flex;
-  align-items: flex-end;
-  flex-direction: column;
+  justify-content: stretch;
   margin-top: 16px;
+
+  .ui-select {
+    flex: 1;
+  }
+}
+
+.vue-colormind__model {
+  margin-bottom: 16px;
 }
 </style>
