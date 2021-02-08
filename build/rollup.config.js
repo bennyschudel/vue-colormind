@@ -11,7 +11,7 @@ const argv = minimist(process.argv.slice(2));
 
 const config = {
   input: 'src/entry.js',
-  external: ['vue', 'lodash', 'd3', 'vue-drag-drop'],
+  external: ['vue', 'lodash', 'd3', 'vue-drag-drop', 'vuedraggable'],
   output: {
     name: 'VueColormind',
     exports: 'named',
@@ -20,6 +20,7 @@ const config = {
       lodash: '_',
       d3: 'd3',
       'vue-drag-drop': 'VueDragDrop',
+      vuedraggable: 'vuedraggable',
       '@hotpink/vue-mono-ui': 'VueMonoUi',
     },
   },
@@ -36,6 +37,10 @@ const config = {
     }),
     buble({
       objectAssign: 'Object.assign',
+      transforms: {
+        asyncAwait: false,
+        forOf: false,
+      },
     }),
     resolve(),
     nodent({
