@@ -41,10 +41,10 @@
     "vuedraggable": "^2.20.0"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.3.0",
+    "@vue/cli-plugin-babel": "^3.12.1",
     "@vue/cli-plugin-eslint": "^3.3.0",
-    "@vue/cli-plugin-unit-jest": "^3.12.1",
-    "@vue/cli-service": "^4.5.11",
+    "@vue/cli-plugin-unit-jest": "^5.0.8",
+    "@vue/cli-service": "^5.0.8",
     "@vue/eslint-config-prettier": "^4.0.1",
     "@vue/test-utils": "^1.0.0-beta.20",
     "babel-core": "7.0.0-bridge.0",
@@ -64,7 +64,7 @@
     "rollup-plugin-sass": "^1.1.0",
     "rollup-plugin-scss": "^0.4.0",
     "rollup-plugin-uglify-es": "0.0.1",
-    "rollup-plugin-vue": "4.3.2",
+    "rollup-plugin-vue": "6.0.0",
     "sass-loader": "^10.1.1",
     "semantic-release": "^17.3.7",
     "vue-template-compiler": "^2.5.21"
